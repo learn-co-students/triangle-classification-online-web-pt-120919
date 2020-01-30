@@ -15,33 +15,39 @@ def initialize(l1, l2, l3)
 @isosceles = isosceles
  end
  
- 
-def valid?
-# The sum of the lengths of any two sides of a triangle always exceeds the length of the third side. This is a principle known as the triangle inequality. Further, each side must be larger than 0.
+ def valid?
+   third_side = @tri_l[0] + @tri_l[1]
+   first_side = @tri_l[1] + @tri_l[2]
+   second_side = @tri_l[2] + @tri_l[0]
+   
+   if (first_side > @tri_l[0]) && (second_side > @tri_l[1]) && (third_side > @tri_l[2]) 
+     if !@tri_l.any? {|i| i <= 0 }
+       true 
+   else 
+     false 
+     #binding.pry
+   end
+   
  end
+   end
  
- 
- 
- 
- def kind
-    equilateral = @tri_l.all? { |i| i == @l1 && i == @l2 && i == @l3 }
-    isosceles = @tri_l.each { |i| (i == @l1 && i == @l3) || (i == @l2 && i == @l3) || (i == @l2 && i == @l1 )}
-    scalene = @tri_l.each { |i| (i != @l1) && (@l1 != @l2) && (i != @l3)}
-      
-    if equilateral
-      :equilateral 
-      elsif isosceles
-      :isosceles
+class TriangleError < StandardError
+
+end
+
+def kind
+    if valid?
+      if @tri_l.uniq.length == 1
+        return :equilateral
+      elsif @tri_l.uniq.length == 2
+        return :isosceles
       else
-        :scalene
+        return :scalene
+      end
+    else
+      raise TriangleError
+    end
+  end
 end
-end
 
 
-
-
-
-
-
-  
-end #class end 
